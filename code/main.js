@@ -27,9 +27,9 @@ function getMostRecentFile(dir) {
 function orderRecentFiles(dir) {
     try {
         return fs.readdirSync(dir)
-        .filter((file) => fs.lstatSync(path.join(dir, file)).isFile())
-        .map((file) => ({ file, ctime: fs.lstatSync(path.join(dir, file)).ctime }))
-        .sort((a, b) => b.ctime.getTime() - a.ctime.getTime());
+            .filter((file) => fs.lstatSync(path.join(dir, file)).isFile())
+            .map((file) => ({ file, ctime: fs.lstatSync(path.join(dir, file)).ctime }))
+            .sort((a, b) => b.ctime.getTime() - a.ctime.getTime());
     } catch {
         fs.mkdirSync(dir)
         return []
@@ -319,8 +319,8 @@ async function parseMessage(msg) {
                 collector.on('collect', async (r, u) => {
                     console.log(`Collected ${r.emoji.name} from ${u.id}`)
                     let deleters = []
-                    for (let user of (await r.users.fetch()).keys()){
-                        if (user != client.user.id){
+                    for (let user of (await r.users.fetch()).keys()) {
+                        if (user != client.user.id) {
                             deleters.push(`<@!${user}>`)
                         }
                     }
@@ -383,12 +383,12 @@ async function extractMentions(guildid, messageText) {
     //console.log("parsing", messageText)
     while (m = messageText.match(/\s*<@([!|&]?)(\d*)>\s*/)) {
         if (m[1] == "&") {
-            objects.push(await Guild.roles.fetch(m[2], false, true))
+            objects.push(await Guild.roles.fetch(m[2], { cache: true, force: true }))
         } else if (m[1] == "" || m[1] == "!") {
             try {
-                objects.push(await Guild.members.fetch(m[2], { cache: false }))
+                objects.push(await Guild.members.fetch(m[2], { cache: true, force: true }))
             } catch {
-                objects.push(await client.users.fetch(m[2], { cache: false }))
+                objects.push(await client.users.fetch(m[2], { cache: true, force: true }))
             }
         } else {
             console.log("Got here, idk how", m)
