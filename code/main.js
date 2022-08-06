@@ -63,7 +63,7 @@ setInterval(async () => {
 
 
 console.log("Starting Cost Bot")
-var client = new discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] })
+var client = new discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_MEMBERS] })
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     selfId = client.user.id
@@ -75,9 +75,7 @@ client.on('messageCreate', async (m) => {
     if (m.author.id == selfId) {
         return
     }
-    console.log("istrigger?")
     if (isTrigger(m)) {
-        console.log("Parsing")
         await parseMessage(m)
     }
 })
@@ -383,12 +381,12 @@ async function extractMentions(guildid, messageText) {
     //console.log("parsing", messageText)
     while (m = messageText.match(/\s*<@([!|&]?)(\d*)>\s*/)) {
         if (m[1] == "&") {
-            objects.push(await Guild.roles.fetch(m[2], { cache: true, force: true }))
+            objects.push(await Guild.roles.fetch(m[2], { cache: false, force: true }))
         } else if (m[1] == "" || m[1] == "!") {
             try {
-                objects.push(await Guild.members.fetch(m[2], { cache: true, force: true }))
+                objects.push(await Guild.members.fetch(m[2], { cache: false, force: true }))
             } catch {
-                objects.push(await client.users.fetch(m[2], { cache: true, force: true }))
+                objects.push(await client.users.fetch(m[2], { cache: false, force: true }))
             }
         } else {
             console.log("Got here, idk how", m)
