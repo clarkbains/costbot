@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  cost-split:
+    container_name: cost-split
+    build: ./code/
+    environment:
+      # Get from discord developer portal
+      API_TOKEN: .......
+      # CSV Channel_ID, or Guild Id::Channel_ID
+      CHANNELS: 742526858439950346, 694353126261653634::865950984043495444
+      DATA_FOLDER: /data
+      # Optional, colour of embeds (useful to distinguish prod and dev bots)
+      COLOUR: FFFFFF
+
+    image: cost-split
+    volumes:
+    # Set SE context with :z if using selinux
+     - './data/:/data/:z'
+    restart: always

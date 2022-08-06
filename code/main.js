@@ -20,24 +20,35 @@ console.log(`Channels: ${config.channels}`)
 console.log(`Most Recent Backup: #${backupNum}`)
 
 function getMostRecentFile(dir) {
-    const files = orderReccentFiles(dir);
+    const files = orderRecentFiles(dir);
     return files.length ? files[0] : undefined;
 }
 
-function orderReccentFiles(dir) {
-    return fs.readdirSync(dir)
+function orderRecentFiles(dir) {
+    try {
+        return fs.readdirSync(dir)
         .filter((file) => fs.lstatSync(path.join(dir, file)).isFile())
         .map((file) => ({ file, ctime: fs.lstatSync(path.join(dir, file)).ctime }))
         .sort((a, b) => b.ctime.getTime() - a.ctime.getTime());
+    } catch {
+        fs.mkdirSync(dir)
+        return []
+    }
 }
 
 
 function readHistoryLookup() {
-    let x = fs.readFileSync(dataFile)
-    console.log(dataFile, String(x))
-    tmp = JSON.parse(String(x))
-    historyLookup = tmp.history
-    itemLookup = tmp.item
+    try {
+        let x = fs.readFileSync(dataFile)
+        console.log(dataFile, String(x))
+        tmp = JSON.parse(String(x))
+        historyLookup = tmp.history
+        itemLookup = tmp.item
+    } catch {
+        historyLookup = {}
+        itemLookup = {}
+    }
+
 }
 
 function writeHistoryLookup() {
