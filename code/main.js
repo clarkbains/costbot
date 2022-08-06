@@ -300,7 +300,9 @@ async function parseMessage(msg) {
             if (totalSubs == 1) {
                 parent = msgs[0]
             } else {
-                parent = await msg.channel.send(await createEmbed(firstGroup, secondGroup, price, reason, true))
+                parent = await msg.channel.send({
+                    embeds: [await createEmbed(firstGroup, secondGroup, price, reason, true)]
+                })
                 msgs.push(parent)
                 console.log(parent)
             }
