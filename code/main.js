@@ -40,7 +40,6 @@ function orderRecentFiles(dir) {
 function readHistoryLookup() {
     try {
         let x = fs.readFileSync(dataFile)
-        console.log(dataFile, String(x))
         tmp = JSON.parse(String(x))
         historyLookup = tmp.history
         itemLookup = tmp.item
