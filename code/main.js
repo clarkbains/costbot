@@ -313,7 +313,7 @@ async function parseMessage(msg) {
                 let reactorFilter = (reaction, user) => {
                     return permittedDeleters.includes(user.id) && reaction.emoji.name == '❌'
                 }
-                const collector = parent.createReactionCollector({ filter: reactorFilter, time: 30_000 })
+                const collector = parent.createReactionCollector({ filter: reactorFilter, time: 1000*60*60*24*7 })
                 collector.on('collect', async (r, u) => {
                     console.log(`Collected ${r.emoji.name} from ${u.id}`)
                     let deleters = []
