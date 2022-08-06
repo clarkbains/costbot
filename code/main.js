@@ -365,6 +365,9 @@ async function expandTargetArray(array) {
             retval.add(entry.user)
         }
         else if (entry instanceof discord.Role) {
+            let guild = await client.guilds.fetch(entry.guild.id)
+            await guild.members.fetch({force: true})
+
             entry.members.forEach(e => {
                 retval.add(e.user)
             })
